@@ -583,6 +583,45 @@ RealtimeController::processRealtimeData(RealtimeData &rtData)
         rtData.setWatts(13.09580164 * v - 85.38477516);
         }
         break;
+    case 66: // ELITE GREY MAG SPEED RESISTANCE UNIT LEVEL 1
+        {
+        double v = rtData.getSpeed();
+        rtData.setWatts(0.0952 + 1.8 * v + 0.0683 * pow(v,2) + -2.5e-004 * pow(v,3));
+        }
+        break;
+    case 67: // ELITE GREY MAG SPEED RESISTANCE UNIT LEVEL 2
+        {
+        double v = rtData.getSpeed();
+        rtData.setWatts(1.87e-014 + 2.06 * v + 0.172 * pow(v,2) + -1.22e-003 * pow(v,3));
+        }
+        break;
+    case 68: // ELITE GREY MAG SPEED RESISTANCE UNIT LEVEL 3
+        {
+        double v = rtData.getSpeed();
+        // Third degree polynomial produces -1 watts at rest. 
+        //rtData.setWatts(-1.52 + 4.02 * v + 0.264 * pow(v,2) + -2.28e-003 * pow(v,3));
+        // Fourth degree polynomial looks like it might sort negative watts issue.
+        rtData.setWatts(0.346 + 2.18 * v + 0.426 * pow(v,2) + -6.64e-003 * pow(v,3) + 3.64e-005 * pow(v,4));
+        }
+        break;
+    case 69: // ELITE GREY MAG SPEED RESISTANCE UNIT LEVEL 4
+        {
+        double v = rtData.getSpeed();
+        // Again, negative watts at rest
+        //rtData.setWatts(-4.74 + 7.8 * v + 0.282 * pow(v,2) + -2.69e-003 * pow(v,3));
+        // Test fourth to see if effect is smaller
+        rtData.setWatts(-0.433 + 3.57 * v + 0.654 * pow(v,2) + -0.0127 * pow(v,3) + 8.37e-005 * pow(v,4));
+        }
+        break;
+    case 70: // ELITE GREY MAG SPEED RESISTANCE UNIT LEVEL 5
+        {
+        double v = rtData.getSpeed();
+        // -5 watts at rest
+        //rtData.setWatts(-5.38 + 10.4 * v + 0.277 * pow(v,2) + -2.5e-003 * pow(v,3));
+        // Fourth degree poly won't resolve, so fitting Elite supplied curve using sixth degree function!
+        rtData.setWatts(-4.25e-011 + 3.72 * v + 0.896 * pow(v,2) + -0.0155 * pow(v,3) + -1.99e-004 * pow(v,4) + 8.75e-006 * pow(v,5) + -6.94e-008 * pow(v,6));
+        }
+        break;
 
     default : // unknown - do nothing
         break;
